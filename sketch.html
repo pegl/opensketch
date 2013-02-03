@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="UTF-8"/>
+	<meta http-equiv="content-language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+	<script type="text/javascript" src="javascripts/jquery.js"></script>
+	<script type="text/javascript" src="javascripts/raphael-2.0.1.js"></script>
+	<script type="text/javascript" src="javascripts/json2.min.js"></script>
+	<script type="text/javascript" src="javascripts/raphael.sketchpad.js"></script>
+
+<!--
+http://phpjs.org/functions/base64_encode/
+http://phpjs.org/functions/base64_decode/
+-->
+	<script type="text/javascript" src="javascripts/base64_encode.js"></script>
+
+</head>
+
+<body>
+
+<div id="editor"></div>
+
+<form action="save.php" method="post">
+	<input type="hidden" name="data" />
+	<input type="submit" value="Save" />
+</form>
+
+<script type="text/javascript">
+	var sketchpad = Raphael.sketchpad("editor", {
+		width: 400,
+		height: 400,
+		editing: true
+	});
+
+	// When the sketchpad changes, update the input field.
+	sketchpad.change(function() {
+		$("#data").val(sketchpad.json());
+		sketchpadJson = sketchpad.json();
+		console.log(sketchpadJson.length);
+		console.log(base64_encode(sketchpadJson).length);
+	});
+</script>
+
+
+<div id="editor"></div>
+
+</body>
+</html>

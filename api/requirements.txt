@@ -1,0 +1,12 @@
+Flask==0.9
+Flask-RESTful==0.1.5
+Jinja2==2.6
+Werkzeug==0.8.3
+anyjson==0.3.3
+argparse==1.2.1
+ipdb==0.7
+ipython==0.13.1
+mongokit==0.8.3
+pycrypto==2.6
+pymongo==2.4.2
+wsgiref==0.1.2
