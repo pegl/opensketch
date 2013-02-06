@@ -12,12 +12,65 @@
 	<script type="text/javascript" src="javascripts/raphael-2.0.1.js"></script>
 	<script type="text/javascript" src="javascripts/json2.min.js"></script>
 	<script type="text/javascript" src="javascripts/raphael.sketchpad.js"></script>
+	<script type="text/javascript" src="javascripts/opensketch.js"></script>
+
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+    <style>
+        body {
+            font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+            font-size: 62.5%;
+        }
+
+        #dialog {
+            display: none;
+        }
+    </style>
+
+    <script>
+        /*
+         * On clicking share, send request to persist and build the link
+         */
+
+        // configurable host
+        if (!window.location.origin) window.location.origin = window.location.protocol+"//"+window.location.host;
+        var apiHost = "http://localhost:5000/sketch/save";
+        // params
+        // oid - ObjectId 
+        // sketchText - drawing in json format
+
+        $(function() {
+            $( "input[type=submit]" )
+            .button()
+            .click(function( event ) {
+                console.log("click");
+                event.preventDefault();
+                var os = new opensketch();
+                var sketchText = sketchpad.json();
+                os.save(apiHost, sketchText, dialog);
+            });
+        });
+    </script>
+
+    <script>
+        var shareLink = '';
+        $("#dialog").hide();
+        var dialog = function(shareLink) {
+            $("#dialog").children(":input")[0].value = window.location.origin + shareLink;
+            $("#dialog").dialog({ width: 350 });
+        };
+
+        $("#dialog").children("input[name=Ok]")[0].click(function() {
+            $(this).parent().hide();
+        })
+    </script>
 
 <!--
 http://phpjs.org/functions/base64_encode/
 http://phpjs.org/functions/base64_decode/
--->
 	<script type="text/javascript" src="javascripts/base64_encode.js"></script>
+-->
 
 </head>
 
@@ -25,15 +78,15 @@ http://phpjs.org/functions/base64_decode/
 
 <div id="editor"></div>
 
-<form action="save.php" method="post">
+<form action="#" method="post">
 	<input type="hidden" name="data" />
 	<input type="submit" value="Save" />
 </form>
 
 <script type="text/javascript">
 	var sketchpad = Raphael.sketchpad("editor", {
-		width: 400,
-		height: 400,
+		width: 600,
+		height: 600,
 		editing: true
 	});
 
@@ -41,13 +94,17 @@ http://phpjs.org/functions/base64_decode/
 	sketchpad.change(function() {
 		$("#data").val(sketchpad.json());
 		sketchpadJson = sketchpad.json();
-		console.log(sketchpadJson.length);
-		console.log(base64_encode(sketchpadJson).length);
 	});
 </script>
 
 
 <div id="editor"></div>
+
+<div id="dialog" title="Share drawing">
+    <p>To share your drawing, simply send the url below to a friend.</p>
+    <input type="text" size="50" readonly value="" />
+    <input type="button" name="Ok" value="Ok" />
+</div>
 
 </body>
 </html>
