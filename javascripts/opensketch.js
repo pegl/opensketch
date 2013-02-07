@@ -27,19 +27,30 @@ var opensketch = function() {
         .error(function(responseData, textStatus, error) {
             console.log(error); 
         })
-        /* do not need complete function here
-        .complete(function(responseData, textStatus ) {
-            //dialog("/?_id=" + responseData._id);
-        });
-        */
 
 	},
 
 	/**
 	 * Function to load a sketch
 	 */
-	this.load = function() {
-        //$.getJSON( url [, data ] [, success(data, textStatus, jqXHR) ] )
+	this.load = function(url, data, sketchpad) {
+        var responseData = null;
+
+        $.ajax({
+            url: url,
+            type: 'GET', // PUT not supported
+            dataType: 'jsonp',
+            jsonp: 'callbackFunc',
+            data: {'oid': data}
+        })
+        .success(function(responseData, textStatus ) {
+            sketchTextJSON = JSON.parse(responseData.sketchText);
+            sketchpad.strokes(sketchTextJSON);
+        })
+        .error(function(responseData, textStatus, error) {
+            console.log(error); 
+        })
+
 	}
 
-};//(window.opensketch);
+};

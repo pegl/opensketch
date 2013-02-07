@@ -64,18 +64,16 @@ class SketchApi(restful.Resource):
         args = parser.parse_args()
 
         # get the rates collection
-        sketch = list(
-            connection.Sketch.find({
+        sketch = connection.Sketch.find_one({
                 '_id': ObjectId(args.oid)
-            }).limit(1)
-        )
+        })
 
         # can't return document?
         #return jsonify(
         #    success=True, 
-        #    sketchText=sketch[0]['sketchText']
+        #    sketchText=sketch['sketchText']
         #)
-        return make_jsonp({'success': True, 'sketchText': sketch[0]['sketchText']})
+        return make_jsonp({'success': True, 'sketchText': str(sketch.sketchText)})
 
     # delete sketch from db
     def delete(self):

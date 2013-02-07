@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="javascripts/json2.min.js"></script>
 	<script type="text/javascript" src="javascripts/raphael.sketchpad.js"></script>
 	<script type="text/javascript" src="javascripts/opensketch.js"></script>
+	<script type="text/javascript" src="javascripts/utils.js"></script>
 
 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
@@ -29,26 +30,52 @@
     </style>
 
     <script>
+
+        /**
+         * On loading, check request args
+         * If oid exists, try to load the drawing from api
+         * set the sketchpad json directly/refresh drawing
+         *
+         */
+        var loadURI = "http://localhost:5000/sketch";
+
+        $(function() {
+            var oid = getParameter("oid") 
+            if (oid.length > 0) {
+                var os = new opensketch();
+                os.load(loadURI, oid, sketchpad);
+            }
+
+        });
+
+    </script>
+
+    <script>
         /*
          * On clicking share, send request to persist and build the link
          */
 
         // configurable host
         if (!window.location.origin) window.location.origin = window.location.protocol+"//"+window.location.host;
-        var apiHost = "http://localhost:5000/sketch/save";
-        // params
-        // oid - ObjectId 
-        // sketchText - drawing in json format
+        var saveURI = "http://localhost:5000/sketch/save";
 
         $(function() {
-            $( "input[type=submit]" )
+            $( "input[type=submit][value=New]" )
             .button()
             .click(function( event ) {
-                console.log("click");
+                event.preventDefault();
+                sketchpad.clear();
+            })
+        });
+
+        $(function() {
+            $( "input[type=submit][value=Save]" )
+            .button()
+            .click(function( event ) {
                 event.preventDefault();
                 var os = new opensketch();
                 var sketchText = sketchpad.json();
-                os.save(apiHost, sketchText, dialog);
+                os.save(saveURI, sketchText, dialog);
             });
         });
     </script>
@@ -61,9 +88,23 @@
             $("#dialog").dialog({ width: 350 });
         };
 
-        $("#dialog").children("input[name=Ok]")[0].click(function() {
-            $(this).parent().hide();
-        })
+        // close the save dialogue
+        $(function() {
+            $( "input[name=Ok]" )
+            .button()
+            .click(function( event ) {
+                event.preventDefault();
+                $("#dialog").dialog("close");
+            })
+        });
+
+        /*
+        if (undefined !== $("#dialog").children("input[name=Ok]")[0]) {
+            $("#dialog").children("input[name=Ok]")[0].click(function() {
+                $(this).parent().hide();
+            })
+        }
+        */
     </script>
 
 <!--
@@ -80,6 +121,7 @@ http://phpjs.org/functions/base64_decode/
 
 <form action="#" method="post">
 	<input type="hidden" name="data" />
+	<input type="submit" value="New" />
 	<input type="submit" value="Save" />
 </form>
 
