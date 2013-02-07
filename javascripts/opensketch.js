@@ -22,7 +22,7 @@ var opensketch = function() {
             data: {'sketchText': data}
         })
         .success(function(responseData, textStatus ) {
-            dialog("/?_id=" + responseData._id);
+            dialog("/?oid=" + responseData._id);
         })
         .error(function(responseData, textStatus, error) {
             console.log(error); 
