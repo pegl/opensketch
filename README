@@ -1,0 +1,22 @@
+TODO
+
+Frontend
+
+- better refactor javascript
+
+
+API
+
+- enable CORS cross origin resource sharing
+
+e.g create a decorator like:
+
+from flask import request, make_response,
+ 
+def any_response(data):
+  ALLOWED = ['http://localhost:8888']
+  response = make_response(data)
+  origin = request.headers['Origin']
+  if origin in ALLOWED:
+    response.headers['Access-Control-Allow-Origin'] = origin
+  return response
