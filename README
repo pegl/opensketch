@@ -20,3 +20,9 @@ def any_response(data):
   if origin in ALLOWED:
     response.headers['Access-Control-Allow-Origin'] = origin
   return response
+
+- convert JSONP get requests to CORS
+OR
+
+- setup nginx to forward requests from localhost/api/sketch to
+  localhost:5000/api/sketch
