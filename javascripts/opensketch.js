@@ -7,6 +7,9 @@
 var opensketch = function() {
 //(var opensketch = function() {
 
+    this.loadURI = "http://localhost:5000/sketch";
+    this.saveURI = "http://localhost:5000/sketch/save";
+
 	/**
 	 * Function to save a sketch, returns a link
 	 */

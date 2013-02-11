@@ -7,133 +7,47 @@
 	<meta http-equiv="content-language" content="en">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-
-	<script type="text/javascript" src="javascripts/jquery.js"></script>
-	<script type="text/javascript" src="javascripts/raphael-2.0.1.js"></script>
-	<script type="text/javascript" src="javascripts/json2.min.js"></script>
-	<script type="text/javascript" src="javascripts/raphael.sketchpad.js"></script>
-	<script type="text/javascript" src="javascripts/opensketch.js"></script>
-	<script type="text/javascript" src="javascripts/utils.js"></script>
-
-
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+    <!--
+    /*
+     * dependencies: jquery, jquery-ui, raphael, json, raphael.sketchpad 
+     */
+    !-->
+    <script type="text/javascript" src="javascripts/jquery.js"></script>
     <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-    <style>
-        html {
-            height: 100%;
-        }
+    <script type="text/javascript" src="javascripts/raphael-2.0.1.js"></script>
+    <script type="text/javascript" src="javascripts/json2.min.js"></script>
+    <script type="text/javascript" src="javascripts/raphael.sketchpad.js"></script>
 
-        body {
-            font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
-            font-size: 62.5%;
-            height: 100%;
-        }
+    <!--
+    /**
+     * custom scripts
+     */
+    !-->
+    <script type="text/javascript" src="javascripts/opensketch.js"></script>
+    <script type="text/javascript" src="javascripts/sketch.js"></script>
 
-        #dialog {
-            display: none;
-        }
-    </style>
 
-    <script>
-
-        /**
-         * On loading, check request args
-         * If oid exists, try to load the drawing from api
-         * set the sketchpad json directly/refresh drawing
-         *
-         */
-        var loadURI = "http://localhost:5000/sketch";
-
-        $(function() {
-            var oid = getParameter("oid") 
-            if (oid.length > 0) {
-                var os = new opensketch();
-                os.load(loadURI, oid, sketchpad);
-            }
-
-        });
-
-    </script>
-
-    <script>
-        /*
-         * On clicking share, send request to persist and build the link
-         */
-
-        // configurable host
-        if (!window.location.origin) window.location.origin = window.location.protocol+"//"+window.location.host;
-        var saveURI = "http://localhost:5000/sketch/save";
-
-        $(function() {
-            $( "input[type=submit][value=New]" )
-            .button()
-            .click(function( event ) {
-                event.preventDefault();
-                sketchpad.clear();
-            })
-        });
-
-        $(function() {
-            $( "input[type=submit][value=Save]" )
-            .button()
-            .click(function( event ) {
-                event.preventDefault();
-                var os = new opensketch();
-                var sketchText = sketchpad.json();
-                os.save(saveURI, sketchText, dialog);
-            });
-        });
-    </script>
-
-    <script>
-        var shareLink = '';
-        $("#dialog").hide();
-        var dialog = function(shareLink) {
-            $("#dialog").children(":input")[0].value = window.location.origin + shareLink;
-            $("#dialog").dialog({ width: 350 });
-        };
-
-        // close the save dialogue
-        $(function() {
-            $( "input[name=Ok]" )
-            .button()
-            .click(function( event ) {
-                event.preventDefault();
-                $("#dialog").dialog("close");
-            })
-        });
-
-        /*
-        if (undefined !== $("#dialog").children("input[name=Ok]")[0]) {
-            $("#dialog").children("input[name=Ok]")[0].click(function() {
-                $(this).parent().hide();
-            })
-        }
-        */
-    </script>
-
-<!--
-http://phpjs.org/functions/base64_encode/
-http://phpjs.org/functions/base64_decode/
-	<script type="text/javascript" src="javascripts/base64_encode.js"></script>
--->
-
+    <link rel="stylesheet" href="/static/site.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 </head>
 
 <body>
 
+<!-- placeholder for drawing editor !-->
 <div id="editor" style="height: 100%;"></div>
 
+<!-- form for handling drawing functions  !-->
 <form action="#" method="post">
 	<input type="hidden" name="data" />
 	<input type="submit" value="New" />
 	<input type="submit" value="Save" />
 </form>
 
+<!-- the script to create the sketchpad !-->
 <script type="text/javascript">
 	var sketchpad = Raphael.sketchpad("editor", {
-		width: "100%",
-		height: "100%",
+		width: "97%",
+		height: "97%",
 		editing: true
 	});
 
@@ -144,8 +58,7 @@ http://phpjs.org/functions/base64_decode/
 	});
 </script>
 
-
-
+<!-- dialogue to display link !-->
 <div id="dialog" title="Share drawing">
     <p>To share your drawing, simply send the url below to a friend.</p>
     <input type="text" size="50" readonly value="" />
